@@ -1,25 +1,20 @@
-// Import required modules
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-// Initialize Express app
 const app = express();
 app.use(bodyParser.json());
 
-// Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/categories_db', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-// Define Category Schema
 const categorySchema = new mongoose.Schema({
     name: { type: String, required: true }
 });
 const Category = mongoose.model('Category', categorySchema);
 
-// Create Category (POST)
 app.post('/api/categories', async (req, res) => {
     try {
         const newCategory = new Category({ name: req.body.name });
@@ -30,7 +25,6 @@ app.post('/api/categories', async (req, res) => {
     }
 });
 
-// Get All Categories (GET)
 app.get('/api/categories', async (req, res) => {
     try {
         const categories = await Category.find();
@@ -40,7 +34,6 @@ app.get('/api/categories', async (req, res) => {
     }
 });
 
-// Get Category By ID (GET)
 app.get('/api/categories/:id', async (req, res) => {
     try {
         const category = await Category.findById(req.params.id);
@@ -51,7 +44,6 @@ app.get('/api/categories/:id', async (req, res) => {
     }
 });
 
-// Update Category (PUT)
 app.put('/api/categories/:id', async (req, res) => {
     try {
         const updatedCategory = await Category.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true });
@@ -62,7 +54,6 @@ app.put('/api/categories/:id', async (req, res) => {
     }
 });
 
-// Delete Category (DELETE)
 app.delete('/api/categories/:id', async (req, res) => {
     try {
         const deletedCategory = await Category.findByIdAndDelete(req.params.id);
@@ -73,7 +64,6 @@ app.delete('/api/categories/:id', async (req, res) => {
     }
 });
 
-// Start Server
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
